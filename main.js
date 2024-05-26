@@ -23,11 +23,11 @@ function startVideo() {
 
 video.addEventListener("play", () => {
 
-    const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas);
-    const displaySize = { width: video.width, height: video.height };
+  const canvas = faceapi.createCanvasFromMedia(video);
+  document.body.append(canvas);
+  const displaySize = { width: video.width, height: video.height };
 
-    faceapi.matchDimensions(canvas, displaySize);
+  faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()) //カメラの中にいる顔をすべて認識
@@ -47,7 +47,6 @@ video.addEventListener("play", () => {
         label: Math.round(detection.age) + " year old " + detection.gender,
       });
       drawBox.draw(canvas);
-
 
       const Array = Object.entries(detection.expressions);
       const scoresArray = Array.map((i) => i[1]);
@@ -77,7 +76,6 @@ video.addEventListener("play", () => {
 
       ctx.drawImage(image, posX, posY, imgWidth, imgHeight); 
       
-
       // setTimeout(function(){
       //   document.body.removeChild(image);
       // }, 1500);
