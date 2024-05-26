@@ -64,20 +64,23 @@ video.addEventListener("play", () => {
 
       // 画像をcnavas上に表示する
       const image = document.createElement("img");
-      const imgWidth = width * 0.4;
-      const imgHeight = height * 0.4;
-      const posX = width / 2;
-      const posY = height / 3;
+      const imgWidth = width * 0.6;
+      const imgHeight = height * 0.6;
+      // const posX = width / 2;
+      // const posY = height / 3;
+      const posX = box._x;
+      const posY = box._y;
       const ctx = canvas.getContext("2d");
 
       image.src = `./img/${expression}.jpg`;
-    //   document.body.appendChild(image);
+      // document.body.appendChild(image);
+
       ctx.drawImage(image, posX, posY, imgWidth, imgHeight); 
       
 
-      setTimeout(function(){
-        document.body.removeChild(image);
-      }, 1500);
+      // setTimeout(function(){
+      //   document.body.removeChild(image);
+      // }, 1500);
 
     });
   }, 2000);
