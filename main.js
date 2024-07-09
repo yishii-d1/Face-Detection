@@ -28,6 +28,8 @@ video.addEventListener("play", () => {
   const displaySize = { width: video.width, height: video.height };
 
   faceapi.matchDimensions(canvas, displaySize);
+  // 画像をcnavas上に表示する
+  const image = document.createElement("img");
   setInterval(async () => {
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()) //カメラの中にいる顔をすべて認識
@@ -40,13 +42,26 @@ video.addEventListener("play", () => {
     faceapi.draw.drawDetections(canvas, resizedDetections); //顔に箱付きの表現
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections); //目鼻口点線表現
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections); //感情情報表現
+    
     resizedDetections.forEach((detection) => {
+      
+      const ctx = canvas.getContext("2d");
+      const height = canvas.getAttribute("height");
+      const width = canvas.getAttribute("width");
+      const imgWidth = width * 0.5;
+      const imgHeight = height * 0.6;
       //年齢、性別表現ボックス
       const box = detection.detection.box;
-      const drawBox = new faceapi.draw.DrawBox(box, {
-        label: Math.round(detection.age) + " year old " + detection.gender,
-      });
-      drawBox.draw(canvas);
+      ctx.drawImage(image, box._x-50, box._y-100, imgWidth, imgHeight); 
+
+/**
+ *  非表示
+   const drawBox = new faceapi.draw.DrawBox(box, {
+    label: Math.round(detection.age) + " year old " + detection.gender,
+  });
+  drawBox.draw(canvas);
+
+ */
 
       const Array = Object.entries(detection.expressions);
       const scoresArray = Array.map((i) => i[1]);
@@ -58,30 +73,13 @@ video.addEventListener("play", () => {
       const idx = scoresArray.findIndex((i) => i === scoreMax);
       const expression = expressionsArray[idx];
 
-      const height = canvas.getAttribute("height");
-      const width = canvas.getAttribute("width");
-
-      // 画像をcnavas上に表示する
-      const image = document.createElement("img");
-      const imgWidth = width * 0.6;
-      const imgHeight = height * 0.6;
-      // const posX = width / 2;
-      // const posY = height / 3;
-      const posX = box._x;
-      const posY = box._y;
-      const ctx = canvas.getContext("2d");
-
+      const posX = box._x - 50;
+      const posY = box._y - 100;
       image.src = `./img/${expression}.jpg`;
-      // document.body.appendChild(image);
-
       ctx.drawImage(image, posX, posY, imgWidth, imgHeight); 
-      
-      // setTimeout(function(){
-      //   document.body.removeChild(image);
-      // }, 1500);
 
     });
-  }, 2000);
+  }, 500);
     
 
 });
